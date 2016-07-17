@@ -4,27 +4,36 @@ const winBoxes = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8],
 
 const initialState = {
     playersTurn: 1,
-    boxText: ["--","--","--","--","--","--","--","--","--"],
     playerOne: [],
     playerTwo: [],
     winner: 0
 };
 
+function isBoxOwned(boxId, state) {
+    for (let n of state.playerOne) {
+        if (n == boxId)
+            return true;
+    }
+
+    for (let n of state.playerTwo) {
+        if (n == boxId)
+            return true;
+    }
+
+    return false;
+}
+
 function applicationReducer(state = initialState, action) {
     switch (action.type) {
         case BOX_CLICKED:
-            if (state.boxText[action.boxId] == "--" && state.winner == 0) {
-                // Set box state
-                let newBoxText = state.boxText.slice();
+            if (isBoxOwned(action.boxId, state) == false && state.winner == 0) {
                 let newPlayerOne = state.playerOne.slice();
                 let newPlayerTwo = state.playerTwo.slice();
 
                 if (state.playersTurn == 1) {
-                    newBoxText[action.boxId] = "X";
                     newPlayerOne.push(action.boxId);
                 }
                 else {
-                    newBoxText[action.boxId] = "O";
                     newPlayerTwo.push(action.boxId);
                 }
 
@@ -38,10 +47,9 @@ function applicationReducer(state = initialState, action) {
                 }
 
                 // Check for winner
-                let newWinner = getWinner({boxText: newBoxText, playerOne: newPlayerOne, playerTwo: newPlayerTwo});
+                let newWinner = getWinner({playerOne: newPlayerOne, playerTwo: newPlayerTwo});
 
                 return Object.assign({}, state, {
-                    boxText: newBoxText,
                     playersTurn: newPlayersTurn,
                     playerOne: newPlayerOne,
                     playerTwo: newPlayerTwo,
@@ -76,9 +84,7 @@ function getWinner(state) {
     }
 
     // Check if there is no winner
-    let noMoreTurns = state.boxText.every((box) => {
-        return box != "--";
-    });
+    let noMoreTurns = state.playerOne.length + state.playerTwo.length >= 9;
     if (noMoreTurns == true)
         return -1; // No winner, and no more empty boxes
     else

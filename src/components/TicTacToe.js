@@ -16,10 +16,24 @@ function getAlertMessage(state) {
         return `Player ${state.winner} won!`;
 }
 
+function getTextForBox(boxId, state) {
+    for (let n of state.playerOne) {
+        if (n == boxId)
+            return "X";
+    }
+
+    for (let n of state.playerTwo) {
+        if (n == boxId)
+            return "O";
+    }
+
+    return "--";
+}
+
 const TicTacToe = ({ state, onBoxClick }) => (
     <Grid>
         <Row>
-            <Col md="12">
+            <Col md={12}>
                 <Jumbotron>
                     <h1>Tic-Tac-Toe</h1>
                     <p>This is a simple tic-tac-toe game created with React and Bootstrap.</p>
@@ -27,35 +41,35 @@ const TicTacToe = ({ state, onBoxClick }) => (
             </Col>
         </Row>
         <Row>
-            <Col md="12" mdOffset="5">
+            <Col md={12} mdOffset={5}>
                 <ButtonGroup>
-                    <Box onClick={() => onBoxClick(0)} text={state.boxText[0]}/>
-                    <Box onClick={() => onBoxClick(1)} text={state.boxText[1]} />
-                    <Box onClick={() => onBoxClick(2)} text={state.boxText[2]} />
+                    <Box boxId={0} onClick={onBoxClick} text={getTextForBox(0, state)} />
+                    <Box boxId={1} onClick={onBoxClick} text={getTextForBox(1, state)} />
+                    <Box boxId={2} onClick={onBoxClick} text={getTextForBox(2, state)} />
                 </ButtonGroup>
             </Col>
         </Row>
         <Row>
-            <Col md="12" mdOffset="5">
+            <Col md={12} mdOffset={5}>
                 <ButtonGroup>
-                    <Box onClick={() => onBoxClick(3)} text={state.boxText[3]} />
-                    <Box onClick={() => onBoxClick(4)} text={state.boxText[4]} />
-                    <Box onClick={() => onBoxClick(5)} text={state.boxText[5]} />
+                    <Box boxId={3} onClick={onBoxClick} text={getTextForBox(3, state)} />
+                    <Box boxId={4} onClick={onBoxClick} text={getTextForBox(4, state)} />
+                    <Box boxId={5} onClick={onBoxClick} text={getTextForBox(5, state)} />
                 </ButtonGroup>
             </Col>
         </Row>
         <Row>
-            <Col md="12" mdOffset="5">
+            <Col md={12} mdOffset={5}>
                 <ButtonGroup>
-                    <Box onClick={() => onBoxClick(6)} text={state.boxText[6]} />
-                    <Box onClick={() => onBoxClick(7)} text={state.boxText[7]} />
-                    <Box onClick={() => onBoxClick(8)} text={state.boxText[8]} />
+                    <Box boxId={6} onClick={onBoxClick} text={getTextForBox(6, state)} />
+                    <Box boxId={7} onClick={onBoxClick} text={getTextForBox(7, state)} />
+                    <Box boxId={8} onClick={onBoxClick} text={getTextForBox(8, state)} />
                 </ButtonGroup>
             </Col>
         </Row>
         <Row className="row-margin-top">
-            <Col md="12">
-                <p><Alert>{getAlertMessage(state)}</Alert></p>
+            <Col md={12}>
+                <Alert>{getAlertMessage(state)}</Alert>
             </Col>
         </Row>
     </Grid>
